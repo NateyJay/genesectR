@@ -1,0 +1,15 @@
+Package: genesectR
+Type: Package
+Title: Genesect analyses in the style of virtualplant.org
+Version: 0.1.0
+Author: Nate Johnson
+Maintainer: Nate Johnson <jax523@gmail.com>
+Description: This tool allows the user to estimate the relatedness of sets of genes in the context of all gene-models for an organism. It uses fisher-exact test or a montecarlo-based approach to determine the scale and significance of this overlap, and plots it using R base plotting functions. 
+License: GNU GENERAL PUBLIC LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    R (>= 3.1)
+Imports:
+    stringr
+RoxygenNote: 7.1.2
