@@ -36,7 +36,9 @@ Here is a simple example of the syntax for a basic run:
     gs <- gs_import(ls, master_set)
     gs <- gs_compute_matricies(gs)
     gs_plot_fischer(gs, breaks=3) # breaks is a vector which inserts spaces before the indexed boxes
-
+    
 <img src="images/Rplot.png" alt="plot" width="400"/>
+<img src="images/Values.png" alt="values" width="100"/>
+
 
 
