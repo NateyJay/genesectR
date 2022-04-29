@@ -7,7 +7,7 @@ Genesect analyses are a useful technique for comparing the overlap of sets of ge
 
 Similar analyses are available in the web-based utilities [virtualplant.org](virtualplant.org) and [connectf.org](connectf.org).  
 
-Magnitude is shown through the log2 transformed Fisher odds-ratio. Significance is shown as the log10 transformed pvalue. Gene overlap between sets is shown in parentheses. 
+Magnitude is shown through the log2 transformed Fisher odds-ratio. Significance is shown as the log10 transformed adjusted p-value. Gene overlap between sets is shown in parentheses. 
 
 <img src="images/Values.png" alt="values" width="200"/>
 
