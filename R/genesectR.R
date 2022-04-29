@@ -34,6 +34,8 @@
 #'
 #' @examples
 gs_import <- function(set_list, master_set) {
+  library(stringr)
+
   message(str_glue("{length(set_list)} sets imported"))
   message(str_glue("{length(master_set)} entries in master set"))
 
