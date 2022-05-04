@@ -27,6 +27,9 @@ This tools is simply installed using the devtools libraries in R.
 
 ### Example
 
+Function inputs include a **list of vectors** comprised of the gene-sets that you want to compare. The second input is a master set of all genes in the transcriptome, provided as a **vector**.  
+*Note: any gene names in your sets that are not contained in the master list will be filtered.*
+
 Here is a simple example of the syntax for a basic run:
 
     require(stringr)
@@ -37,7 +40,7 @@ Here is a simple example of the syntax for a basic run:
     ls <- list(Set_A= sample(master_set, 300),
              Set_B= sample(master_set, 27),
              Set_C= sample(master_set, 99))
- 
+             
     # performing analysis and plotting
     gs <- gs_import(ls, master_set)
     gs <- gs_compute_matricies(gs)
