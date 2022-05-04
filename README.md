@@ -49,4 +49,32 @@ Here is a simple example of the syntax for a basic run:
 <img src="images/Rplot.png" alt="plot" width="400"/>
 
 
+## Multi-comparison plot
+
+While the standard genesect is useful for uniformly comparing several sets, it can become unwieldy when comparing a large number of sets. Additionally, in some experiments you may not be interested in an all by all comparison, and may just want to compare two groups of sets.
+
+
+
+    # making trivial test data.
+    # ABC will be compared against WXYZ
+    master_set <- str_glue("Gene_{1:1000}")
+
+    ls <- list(Set_A= sample(master_set, 300),
+               Set_B= sample(master_set[1:100], 27),
+               Set_C= sample(master_set, 99),
+               Set_V= sample(master_set[1:100], 15),
+               Set_W= sample(master_set, 201),
+               Set_X= sample(master_set, 500),
+               Set_Y= sample(master_set, 44),
+               Set_Z= sample(master_set, 766))
+
+    # imports are performed as normal
+    gs <- gs_import(ls, master_set)
+    gs <- gs_compute_matricies(gs)
+
+    # here we supply a vector of lists showing which sets should be plotted along the y-axis.
+    gs_multi_plot(gs, c("Set_V","Set_W","Set_X","Set_Y","Set_Z"))
+
+
+<img src="images/Multiplot.png" alt="plot" width="400"/>
 
