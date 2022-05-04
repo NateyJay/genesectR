@@ -641,6 +641,7 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
   }
   p.df$odds <- apply(p.df[c(1,2)], 1, mat_to_val, gs$mats$fet_odds)
   p.df$padj <- apply(p.df[c(1,2)], 1, mat_to_val, gs$mats$fet_padj)
+  p.df$overlap <- apply(p.df[c(1,2)], 1, mat_to_val, gs$mats$overlap)
   p.df$x <- match(p.df$x_name, unique(p.df$x_name))
   p.df$y <- match(p.df$y_name, unique(p.df$y_name))
 
@@ -663,13 +664,15 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
   plot(1,1, type='n', xlim=c(0,max_dim), ylim=c(0,max_dim), xlab='', ylab='', axes=F)
   rect(p.df$x, p.df$y, p.df$x+1, p.df$y+1, col=p.df$fill_color)
 
-  text(p.df$x+.5, p.df$y+.5, round(p.df$log_odds,1), pos=3,  adj=c(0.5,0.5),
-       cex=value.cex)
-  text(p.df$x+.5, p.df$y+.5, round(p.df$log_padj,1), pos=1,  adj=c(0.5,0.5),
+  text(p.df$x+.5, p.df$y+.5, round(p.df$log_odds,1), pos=3,# adj=c(0.5,-0.3),
        cex=value.cex, font=2)
+  text(p.df$x+.5, p.df$y+.5, round(p.df$log_padj,1),# adj=c(0.5,1.3),
+       cex=value.cex, font=1)
+  text(p.df$x+.5, p.df$y+.5, round(p.df$log_padj,1), pos=1, # adj=c(0.5,1.3),
+       cex=value.cex, font=1)
 
-  text(min(p.df$x) - 0.5, p.df$y+0.5, p.df$y_name, adj=c(1,0.5), cex=label.cex)
-  text(p.df$x+0.5, max(p.df$y) + 1.25, p.df$x_name, adj=c(0,0.5), srt=90, cex=label.cex)
+  text(min(p.df$x) - 0.5, p.df$y+0.5, p.df$y_name, adj=c(1,0.5), cex=label.cex, font=3)
+  text(p.df$x+0.5, max(p.df$y) + 1.25, p.df$x_name, adj=c(0,0.5), srt=90, cex=label.cex, font=3)
 
 
   break_n = 21
@@ -685,23 +688,23 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
 
 
 
-# master_set <- str_glue("Gene_{1:1000}")
-#
-# ls <- list(Set_A= sample(master_set, 300),
-#            Set_B= sample(master_set[1:100], 27),
-#            Set_C= sample(master_set, 99),
-#            Set_V= sample(master_set[1:100], 15),
-#            Set_W= sample(master_set, 201),
-#            Set_X= sample(master_set, 500),
-#            Set_Y= sample(master_set, 44),
-#            Set_Z= sample(master_set, 766))
-#
-#
-# gs <- gs_import(ls, master_set)
-# gs <- gs_compute_matricies(gs)
-#
-#
-# gs_multi_plot(gs, c("Set_V","Set_W","Set_X","Set_Y","Set_Z"))
+master_set <- str_glue("Gene_{1:1000}")
+
+ls <- list(Set_A= sample(master_set, 300),
+           Set_B= sample(master_set[1:100], 27),
+           Set_C= sample(master_set, 99),
+           Set_V= sample(master_set[1:100], 15),
+           Set_W= sample(master_set, 201),
+           Set_X= sample(master_set, 500),
+           Set_Y= sample(master_set, 44),
+           Set_Z= sample(master_set, 766))
+
+
+gs <- gs_import(ls, master_set)
+gs <- gs_compute_matricies(gs)
+
+
+gs_multi_plot(gs, c("Set_V","Set_W","Set_X","Set_Y","Set_Z"))
 
 
 
