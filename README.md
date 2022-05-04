@@ -76,5 +76,5 @@ While the standard genesect is useful for uniformly comparing several sets, it c
     gs_multi_plot(gs, c("Set_V","Set_W","Set_X","Set_Y","Set_Z"))
 
 
-<img src="images/Mulitplot.png" alt="multiplot" width="350"/>
+<img src="images/Multiplot.png" alt="multiplot" width="350"/>
 
