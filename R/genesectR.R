@@ -576,6 +576,137 @@ gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5) {
 }
 
 
+#' Multi-comparison plot
+#'
+#' @param gs
+#' @param expand
+#' @param value.cex
+#' @param label.cex
+#'
+#' @return
+#' @export
+#'
+#' @examples
+gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
+  set_list = gs$set_list
+
+  x_len = length(set_list) - length(expand)
+
+  if (x_len < 1) {
+    stop("error: set_list - expand must be > 0")
+  }
+
+  mat = gs$mats$fet_padj
+  m.df = reshape2::melt(mat)
+  names(m.df) <- c("rows", "cols", "padj")
+
+  order_paste <- function(x) {
+    x = x[order(x)]
+    return(paste(x, collapse='-'))
+  }
+
+  m.df$comp = apply(m.df[,c(1,2)], 1, order_paste)
+
+  direction <- function(x) {
+    n = colnames(mat)
+    if (x[1] == x[2]) {
+      return(NA)
+    }
+
+    i1 = match(x[1],n)
+    i2 = match(x[2],n)
+    if (i2 < i1) {
+      return('lower')
+    } else {
+      return('upper')
+    }
+  }
+
+  m.df$tri = apply(m.df[,c(1,2)], 1, direction)
+
+  m.df <- m.df[order(m.df$padj),]
+  m.df <- m.df[!duplicated(m.df$comp),]
+  m.df <- m.df[complete.cases(m.df),]
+
+  x_names = colnames(mat)[colnames(mat) %notin% expand]
+  y_names = expand
+
+  p.df <- data.frame(x_name=rep(x_names, length(y_names)),
+                     y_name=rep(y_names, each=length(x_names)))
+  p.df$comp <- apply(p.df[,c(1,2)], 1, order_paste)
+  p.df$pval <- m.df$padj[match(p.df$comp, m.df$comp)]
+
+  mat_to_val = function(x, mat) {
+    return(mat[x[1], x[2]])
+  }
+  p.df$odds <- apply(p.df[c(1,2)], 1, mat_to_val, gs$mats$fet_odds)
+  p.df$padj <- apply(p.df[c(1,2)], 1, mat_to_val, gs$mats$fet_padj)
+  p.df$x <- match(p.df$x_name, unique(p.df$x_name))
+  p.df$y <- match(p.df$y_name, unique(p.df$y_name))
+
+  max_dim = max(c(p.df$y,p.df$x)) + 1
+
+  p.df$x = max_dim - max(p.df$x) + p.df$x - 1
+  p.df$y = max_dim - max(p.df$y) + p.df$y - 1
+
+  p.df$log_odds <- log2(p.df$odds)
+  p.df$log_padj <- log10(p.df$padj)
+
+
+  palette = hcl.colors(100, 'Purple-Green')[20:80]
+
+  p.df$fill_color <- range_to_color(p.df$log_odds, palette)
+
+
+
+  par(xpd=T, mar=rep(5,4))
+  plot(1,1, type='n', xlim=c(0,max_dim), ylim=c(0,max_dim), xlab='', ylab='', axes=F)
+  rect(p.df$x, p.df$y, p.df$x+1, p.df$y+1, col=p.df$fill_color)
+
+  text(p.df$x+.5, p.df$y+.5, round(p.df$log_odds,1), pos=3,  adj=c(0.5,0.5),
+       cex=value.cex)
+  text(p.df$x+.5, p.df$y+.5, round(p.df$log_padj,1), pos=1,  adj=c(0.5,0.5),
+       cex=value.cex, font=2)
+
+  text(min(p.df$x) - 0.5, p.df$y+0.5, p.df$y_name, adj=c(1,0.5), cex=label.cex)
+  text(p.df$x+0.5, max(p.df$y) + 1.25, p.df$x_name, adj=c(0,0.5), srt=90, cex=label.cex)
+
+
+  break_n = 21
+
+  minmax=round(max(abs(p.df$log_odds[is.finite(p.df$log_odds)]), na.rm=T),1)
+
+
+  color_legend(min(p.df$x), 0,palette, dim.x = 1, .25, minmax=c(-round(minmax,1),round(minmax,1)),
+               main='L2-fold odds-ratio')
+
+}
+
+
+
+
+# master_set <- str_glue("Gene_{1:1000}")
+#
+# ls <- list(Set_A= sample(master_set, 300),
+#            Set_B= sample(master_set[1:100], 27),
+#            Set_C= sample(master_set, 99),
+#            Set_V= sample(master_set[1:100], 15),
+#            Set_W= sample(master_set, 201),
+#            Set_X= sample(master_set, 500),
+#            Set_Y= sample(master_set, 44),
+#            Set_Z= sample(master_set, 766))
+#
+#
+# gs <- gs_import(ls, master_set)
+# gs <- gs_compute_matricies(gs)
+#
+#
+# gs_multi_plot(gs, c("Set_V","Set_W","Set_X","Set_Y","Set_Z"))
+
+
+
+
+
 #' palette function
 #'
 #' @param values
