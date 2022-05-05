@@ -37,7 +37,7 @@ Here is a simple example of the syntax for a basic run:
     # formatting fake input data
     master_set <- c(str_glue("Gene_{1:1000}"))
 
-    # The set list is composed of character vectors which are found in the master set. Vector names will shown as labels.
+    # The set list is composed of character vectors of items found in the master set. Vector names will shown as labels.
     ls <- list(Set_A= sample(master_set, 300),
              Set_B= sample(master_set, 27),
              Set_C= sample(master_set, 99))
