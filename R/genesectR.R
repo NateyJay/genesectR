@@ -6,7 +6,7 @@
 # Example -----------------------------------------------------------------
 
 
-# master_set <- str_glue("Gene_{1:1000}")
+# master_set <- c(str_glue("Gene_{1:1000}"))
 #
 # ls <- list(Set_A= sample(master_set, 300),
 #            Set_B= sample(master_set, 27),
