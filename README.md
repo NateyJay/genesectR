@@ -5,7 +5,7 @@
 ### What is a genesect plot?
 Genesect analyses are a useful technique for comparing the overlap of sets of genes. These analyses can perform pairwise comparisons between sets, giving the direction, magnitude, and statistical significance of these overlaps. This package uses one-tailed Fisher Exact Tests to calculate the odds-ratio and p-value for set overlaps and plot locations to indicate enrichment or depletion. 
 
-Similar analyses are available in the web-based utilities [virtualplant.org](virtualplant.org) and [connectf.org](connectf.org).  
+Similar analyses are available in the web-based utilities [virtualplant.org](http://virtualplant.bio.nyu.edu/cgi-bin/vpweb/) and [connectf.org](https://connectf.org/).  
 
 Magnitude is shown through the log2 transformed Fisher odds-ratio. Significance is shown as the log10 transformed adjusted p-value. Gene overlap between sets is shown in parentheses. 
 
