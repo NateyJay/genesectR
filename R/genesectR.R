@@ -14,7 +14,7 @@
 #
 #
 # gs <- gs_import(ls, master_set)
-# gs <- gs_compute_matricies(gs)
+# gs <- gs_compute_matricies(gs, mc=T)
 # gs_plot_fischer(gs, breaks=3)
 
 
@@ -166,12 +166,13 @@ gs_monte_carlo <- function(setA, setB, master_set, n= 1000, verbose=F) {
 #' Wrapper to compute all matricies
 #'
 #' @param gs
+#' @param mc
 #'
 #' @return
 #' @export
 #'
 #' @examples
-gs_compute_matricies <- function(gs) {
+gs_compute_matricies <- function(gs, mc=F) {
   # pval : FET p-values
   # padj : FET adjusted p-values (BH)
   # odds : FET odds-ratio
@@ -192,17 +193,27 @@ gs_compute_matricies <- function(gs) {
     setB = gs$set_list[[b_i]]
 
     fi_test = gs_fisher(setA, setB, length(gs$master_set))
-    mc_test = gs_monte_carlo(setA, setB, gs$master_set, n=1000)
+
 
     add.df <- data.frame(A=names(gs$set_list[a_i]),
                          B=names(gs$set_list[b_i]),
                          over=     fi_test$greater_p,
                          under=    fi_test$lesser_p,
                          odds=     fi_test$odds_rat,
-                         overlap=  fi_test$overlap,
-                         mc_over=  mc_test$greater_p,
-                         mc_under= mc_test$lesser_p,
-                         z_score=  mc_test$z_score)
+                         overlap=  fi_test$overlap)
+
+    if (mc) {
+      mc_test = gs_monte_carlo(setA, setB, gs$master_set, n=1000)
+
+      add.df <- cbind(add.df,
+                      data.frame(
+                        mc_over=  mc_test$greater_p,
+                        mc_under= mc_test$lesser_p,
+                        z_score=  mc_test$z_score
+                        )
+                      )
+
+    }
     comp.df <- rbind(comp.df, add.df)
 
   }
@@ -270,8 +281,10 @@ gs_compute_matricies <- function(gs) {
   m_adj <- matrix(p.adjust(vec, 'BH'), byrow=F, ncol=length(gs$set_list))
   m_odds = matrix(odds_vec, byrow=F, ncol=length(gs$set_list))
   m_lap  = matrix(lap_vec, byrow=F, ncol=length(gs$set_list))
-  m_mc  <- matrix(mc_vec, byrow=F, ncol=length(gs$set_list))
-  m_z    = matrix(z_vec, byrow=F, ncol=length(gs$set_list))
+  if (mc) {
+    m_mc  <- matrix(mc_vec, byrow=F, ncol=length(gs$set_list))
+    m_z    = matrix(z_vec, byrow=F, ncol=length(gs$set_list))
+  }
 
   namify <- function(m) {
     rownames(m) <- names(gs$set_list)
@@ -284,15 +297,19 @@ gs_compute_matricies <- function(gs) {
   m_odds <- namify(m_odds)
   m_lap <- namify(m_lap)
   m_adj <- namify(m_adj)
-  m_mc <- namify(m_mc)
-  m_z <- namify(m_z)
+  if (mc) {
+    m_mc <- namify(m_mc)
+    m_z <- namify(m_z)
+  }
 
   ls <- list(fet_pval=m,
              fet_padj=m_adj,
              fet_odds=m_odds,
-             overlap=m_lap,
-             mc_pval= m_mc,
-             mc_z=m_z)
+             overlap=m_lap)
+  if (mc) {
+    ls$mc_pval= m_mc
+    ls$mc_z=m_z
+  }
 
   gs$mats <- ls
   return(gs)
