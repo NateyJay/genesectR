@@ -64,7 +64,7 @@ gs_import <- function(set_list, master_set) {
 #' @export
 #'
 #' @examples
-gs_fisher <- function(setA, setB, master_len) {
+gs_fisher <- function(setA, setB, master_len, master_set) {
   # Returns a list of stats between 2 sets of genes considering the length of all genes
   # This includes 1-tailed p-values for greater and less than, as well as the odd-ratio and size of overlap
 
@@ -192,7 +192,7 @@ gs_compute_matricies <- function(gs, mc=F) {
     setA = gs$set_list[[a_i]]
     setB = gs$set_list[[b_i]]
 
-    fi_test = gs_fisher(setA, setB, length(gs$master_set))
+    fi_test = gs_fisher(setA, setB, length(gs$master_set), gs$master_set)
 
 
     add.df <- data.frame(A=names(gs$set_list[a_i]),
