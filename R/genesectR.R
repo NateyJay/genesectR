@@ -688,8 +688,18 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
   text(p.df$x+.5, p.df$y+.5, str_glue("({round(p.df$overlap,1)})"), pos=1, # adj=c(0.5,1.3),
        cex=value.cex, font=3)
 
-  text(min(p.df$x) - 0.5, p.df$y+0.5, p.df$y_name, adj=c(1,0.5), cex=label.cex, font=3)
-  text(p.df$x+0.5, max(p.df$y) + 1.25, p.df$x_name, adj=c(0,0.5), srt=90, cex=label.cex, font=3)
+  text(min(p.df$x) - 0.5, unique(p.df$y)+0.5, unique(p.df$y_name), adj=c(1,0.5), cex=label.cex, font=3)
+  text(unique(p.df$x)+0.5, max(p.df$y) + 1.5, unique(p.df$x_name), adj=c(0,0.5), srt=90, cex=label.cex, font=3)
+
+  x1 = unique(p.df$x); x2 = x1 + 1; y1 = max(p.df$y)+1.1; y2=y1 + .25
+  rect(x1,y1,x2,y2, col='grey85', border='black')
+  text((x1+x2)/2, (y1+y2)/2, lengths(gs$set_list)[x_names], cex=label.cex, font=3)
+
+
+  x1 = min(p.df$x) - .35; x2 = x1 + .25; y1 = unique(p.df$y); y2=y1 + 1
+  rect(x1,y1,x2,y2, col='grey85', border='black')
+  text((x1+x2)/2, (y1+y2)/2, lengths(gs$set_list)[y_names], cex=label.cex, font=3, srt=90)
+
 
 
   break_n = 21
@@ -699,6 +709,8 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
 
   color_legend(min(p.df$x), 0,palette, dim.x = 1, .25, minmax=c(-round(minmax,1),round(minmax,1)),
                main='L2-fold odds-ratio')
+
+
 
 }
 
