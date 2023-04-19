@@ -673,7 +673,9 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
 
   palette = hcl.colors(100, 'Purple-Green')[20:80]
 
-  p.df$fill_color <- range_to_color(p.df$log_odds, palette)
+
+  minmax=abs(c(max(p.df$log_odds, na.rm=T), min(p.df$log_odds, na.rm=T)))
+  p.df$fill_color <- range_to_color(p.df$log_odds, palette, minmax=minmax)
 
 
 
