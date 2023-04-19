@@ -675,6 +675,7 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
 
 
   minmax=abs(c(max(p.df$log_odds, na.rm=T), min(p.df$log_odds, na.rm=T)))
+  minmax = c(-1*minmax, minmax)
   p.df$fill_color <- range_to_color(p.df$log_odds, palette, minmax=minmax)
 
 
