@@ -8,14 +8,23 @@ gs_plot_fischer(
   gs,
   breaks = c(),
   gap = 0.2,
-  margin = 5,
   palette = "Purple-Green",
   palette_trim = 0.2,
   zlim = NULL
 )
 }
 \arguments{
-\item{margin}{}
+\item{gs}{genesectR object}
+
+\item{breaks}{positions where there will be a gap between boxes}
+
+\item{gap}{gap size proportional to box}
+
+\item{palette}{hcl.colors palette (found in hcl.pals()) which will be used in colorizing the genesect.}
+
+\item{palette_trim}{a percentage of the palette which will be trimmed from the most extreme values. This is useful to remove the most dark colors (default top 0.2) from the palette, which can be difficult to read text on.}
+
+\item{zlim}{a value used to define the maximum colors plotted. Useful for sharing the same color scale between genesects.}
 }
 \description{
 Wrapper to plot the fisher exact test analysis

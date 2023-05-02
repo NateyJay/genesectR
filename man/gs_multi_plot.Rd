@@ -15,8 +15,35 @@ gs_multi_plot(
 )
 }
 \arguments{
-\item{label.cex}{}
+\item{gs}{genesectR object}
+
+\item{expand}{vector of set names which will be plotted along the top axis, comparing against those which are not listed.}
+
+\item{value.cex}{scaling for values within boxes}
+
+\item{label.cex}{scaling for axis labels}
+
+\item{zlim}{a value used to define the maximum colors plotted. Useful for sharing the same color scale between genesects.}
+
+\item{palette}{hcl.colors palette (found in hcl.pals()) which will be used in colorizing the genesect.}
+
+\item{palette_trim}{a percentage of the palette which will be trimmed from the most extreme values. This is useful to remove the most dark colors (default top 0.2) from the palette, which can be difficult to read text on.}
 }
 \description{
 Multi-comparison plot
+}
+\examples{
+
+master_set <- c(str_glue("Gene_{1:1000}"))
+
+ls <- list(Set_A= sample(master_set, 300),
+           Set_B= sample(master_set, 27),
+           Set_C= sample(master_set, 99))
+
+
+gs <- gs_import(ls, master_set)
+gs <- gs_compute_matricies(gs, mc=T)
+par(mar=c(2,2,10,10))
+gs_multi_plot(gs, expand=c("Set_V","Set_W","Set_X","Set_Y","Set_Z"),
+              zlim=1)
 }

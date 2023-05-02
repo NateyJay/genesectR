@@ -486,16 +486,18 @@ gs_make_plot.df <- function(gs, breaks, plot_type="pval") {
 
 #' Wrapper to plot the fisher exact test analysis
 #'
-#' @param gs
-#' @param breaks
-#' @param gap
-#' @param margin
+#' @param gs genesectR object
+#' @param breaks positions where there will be a gap between boxes
+#' @param gap gap size proportional to box
+#' @param palette hcl.colors palette (found in hcl.pals()) which will be used in colorizing the genesect.
+#' @param palette_trim a percentage of the palette which will be trimmed from the most extreme values. This is useful to remove the most dark colors (default top 0.2) from the palette, which can be difficult to read text on.
+#' @param zlim a value used to define the maximum colors plotted. Useful for sharing the same color scale between genesects.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5,
+gs_plot_fischer <- function(gs, breaks = c(), gap=0.2,
                             palette='Purple-Green',
                             palette_trim=0.2,
                             zlim=NULL) {
@@ -621,15 +623,31 @@ gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5,
 
 #' Multi-comparison plot
 #'
-#' @param gs
-#' @param expand
-#' @param value.cex
-#' @param label.cex
+#' @param gs genesectR object
+#' @param expand vector of set names which will be plotted along the top axis, comparing against those which are not listed.
+#' @param label.cex scaling for axis labels
+#' @param value.cex scaling for values within boxes
+#' @param palette hcl.colors palette (found in hcl.pals()) which will be used in colorizing the genesect.
+#' @param palette_trim a percentage of the palette which will be trimmed from the most extreme values. This is useful to remove the most dark colors (default top 0.2) from the palette, which can be difficult to read text on.
+#' @param zlim a value used to define the maximum colors plotted. Useful for sharing the same color scale between genesects.
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#'
+#' master_set <- c(str_glue("Gene_{1:1000}"))
+#'
+#' ls <- list(Set_A= sample(master_set, 300),
+#'            Set_B= sample(master_set, 27),
+#'            Set_C= sample(master_set, 99))
+#'
+#'
+#' gs <- gs_import(ls, master_set)
+#' gs <- gs_compute_matricies(gs, mc=T)
+#' par(mar=c(2,2,10,10))
+#' gs_multi_plot(gs, expand=c("Set_V","Set_W","Set_X","Set_Y","Set_Z"),
+#'               zlim=1)
 gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8,
                           zlim=NULL,
                           palette='Purple-Green',
@@ -758,7 +776,8 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8,
 
 
 # par(mar=c(2,2,10,10))
-# gs_multi_plot(gs, expand=c("Set_V","Set_W","Set_X","Set_Y","Set_Z"))
+# gs_multi_plot(gs, expand=c("Set_V","Set_W","Set_X","Set_Y","Set_Z"),
+#               zlim=1)
 
 
 
