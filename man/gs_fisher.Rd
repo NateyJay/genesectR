@@ -4,13 +4,10 @@
 \alias{gs_fisher}
 \title{fisher test}
 \usage{
-gs_fisher(setA, setB, master_len)
+gs_fisher(setA, setB, master_len, master_set)
 }
 \arguments{
 \item{master_len}{}
-}
-\value{
-
 }
 \description{
 fisher test

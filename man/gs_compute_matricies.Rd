@@ -4,13 +4,10 @@
 \alias{gs_compute_matricies}
 \title{Wrapper to compute all matricies}
 \usage{
-gs_compute_matricies(gs)
+gs_compute_matricies(gs, mc = F)
 }
 \arguments{
-\item{gs}{}
-}
-\value{
-
+\item{mc}{}
 }
 \description{
 Wrapper to compute all matricies

@@ -9,9 +9,6 @@ gs_monte_carlo(setA, setB, master_set, n = 1000, verbose = F)
 \arguments{
 \item{verbose}{}
 }
-\value{
-
-}
 \description{
 montecarlo test
 }

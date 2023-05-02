@@ -9,9 +9,6 @@ range_to_color(values, pal, minmax = NULL, log = F)
 \arguments{
 \item{log}{}
 }
-\value{
-
-}
 \description{
 palette function
 }

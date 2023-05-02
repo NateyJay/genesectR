@@ -9,9 +9,6 @@ color_legend(ori.x, ori.y, colors, minmax, dim.x, dim.y, main = "", cex = 0.8)
 \arguments{
 \item{cex}{}
 }
-\value{
-
-}
 \description{
 Legend plotting function
 }

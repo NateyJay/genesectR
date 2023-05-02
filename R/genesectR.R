@@ -495,7 +495,10 @@ gs_make_plot.df <- function(gs, breaks, plot_type="pval") {
 #' @export
 #'
 #' @examples
-gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5) {
+gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5,
+                            palette='Purple-Green',
+                            palette_trim=0.2,
+                            zlim=NULL) {
   set_list = gs$set_list
   mats = gs$mats
 
@@ -551,13 +554,28 @@ gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5) {
   p.df$col[p.df$x_name == p.df$y_name] <- 'grey50'
   # hcl.pals(type='diverging')
   max_odds=max(abs(p.df$lodds[is.finite(p.df$lodds)]), na.rm=T)
-  palette = hcl.colors(100, 'Purple-Green')[20:80]
-  filter = (!is.na(p.df$lodds) & p.df$to_print)
-  p.df$col[filter] <- range_to_color(p.df$lodds[filter],
-                                     pal=palette,
-                                     minmax=c(-max_odds, max_odds))
 
-  par(mar=c(2,margin,margin,2), xpd=T)
+
+  if (is.null(zlim)) {
+    zlim= c(-max_odds, max_odds)
+  }
+
+  zlim = max(abs(zlim))
+  zlim = c(-zlim, zlim)
+
+  get_color <- gs_color_scale(zlim, pal=palette, pal_trim=palette_trim)
+
+  # filter = (!is.na(p.df$lodds) & p.df$to_print)
+  # palette = hcl.colors(100, 'Purple-Green')[20:80]
+  # p.df$col[filter] <- range_to_color(p.df$lodds[filter],
+  #                                    pal=palette,
+  #                                    minmax=c(-max_odds, max_odds))
+
+  f = (!is.na(p.df$lodds) & p.df$to_print)
+  p.df$col[f] <- get_color(p.df$lodds[f])
+
+  xpd=par()$xpd
+  par(xpd=T)
 
 
 
@@ -572,8 +590,13 @@ gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5) {
   text(t.df$x+.5, t.df$y+.5, round_and_na_fix(log10(t.df$padj)),adj=c(0.5,0.5))
   text(t.df$x+.5, t.df$y+.5, str_glue("({round_and_na_fix(t.df$inter)})"), pos=1, font=3)
 
-  text(unique(p.df$x)+.5, max(p.df$y,na.rm=T)+1, unique(p.df$x_name),pos=3, font=3)
+  # top labels
+  # text(unique(p.df$x)+.5, max(p.df$y,na.rm=T)+1, unique(p.df$x_name),pos=3, font=3)
+  text(unique(p.df$x)+.5, max(p.df$y,na.rm=T)+1 + par()$cxy[1] * 0.5,
+       unique(p.df$x_name), font=3, srt=90,
+       adj=c(0, 0.5))
 
+  # left labels
   text(0, unique(p.df$y)+.5, unique(p.df$y_name),pos=2, font=3)
 
   lens = unlist(lapply(gs$set_list, length))
@@ -587,10 +610,13 @@ gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5) {
 
   usr = par()$usr
 
-  color_legend(0, 0,palette, dim.x = 1, .25, minmax=c(-round(max_odds,1),round(max_odds,1)),
+  color_legend(0, 0,get_color(), dim.x = 1, .25, minmax=c(-round(max_odds,1),round(max_odds,1)),
                main='L2-fold odds-ratio')
 
+  par(xpd=xpd)
+
 }
+# gs_plot_fischer(gs, breaks=3)
 
 
 #' Multi-comparison plot
@@ -604,7 +630,10 @@ gs_plot_fischer <- function(gs, breaks = c(), gap=0.2, margin=5) {
 #' @export
 #'
 #' @examples
-gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
+gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8,
+                          zlim=NULL,
+                          palette='Purple-Green',
+                          palette_trim=0.2) {
   set_list = gs$set_list
 
   x_len = length(set_list) - length(expand)
@@ -671,18 +700,26 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
   p.df$log_padj <- log10(p.df$padj)
 
 
-  palette = hcl.colors(100, 'Purple-Green')[20:80]
+  if (is.null(zlim)) {
+    minmax = p.df$log_odds[!is.infinite(p.df$log_odds)]
+    minmax = minmax[!is.na(minmax)]
+    minmax = max(abs(minmax))
+
+    zlim= c(-minmax, minmax)
+  }
+
+  zlim = max(abs(zlim))
+  zlim = c(-zlim, zlim)
+
+  get_color <- gs_color_scale(zlim, pal=palette, pal_trim=palette_trim)
 
 
-  minmax=max(abs(c(max(p.df$log_odds, na.rm=T), min(p.df$log_odds, na.rm=T))))
-  minmax = c(-1*minmax, minmax)
-  p.df$fill_color <- range_to_color(p.df$log_odds, palette, minmax=minmax)
-
-
-
-  par(xpd=T, mar=rep(5,4))
+  # par(xpd=T, mar=rep(5,4))
+  xpd = par()$xpd
+  par(xpd=T)
   plot(1,1, type='n', xlim=c(0,max_dim), ylim=c(0,max_dim), xlab='', ylab='', axes=F)
-  rect(p.df$x, p.df$y, p.df$x+1, p.df$y+1, col=p.df$fill_color)
+  rect(p.df$x, p.df$y, p.df$x+1, p.df$y+1,
+       col=get_color(p.df$log_odds))
 
   text(p.df$x+.5, p.df$y+.5, round(p.df$log_odds,1), pos=3,# adj=c(0.5,-0.3),
        cex=value.cex, font=2)
@@ -707,15 +744,23 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
 
   break_n = 21
 
-  minmax=round(max(abs(p.df$log_odds[is.finite(p.df$log_odds)]), na.rm=T),1)
+  # minmax=round(max(abs(p.df$log_odds[is.finite(p.df$log_odds)]), na.rm=T),1)
 
 
-  color_legend(min(p.df$x), 0,palette, dim.x = 1, .25, minmax=c(-round(minmax,1),round(minmax,1)),
+  color_legend(min(p.df$x), 0, get_color(), dim.x = 1, .25, minmax=round(zlim,1),
                main='L2-fold odds-ratio')
 
 
+  par(xpd=xpd)
+
 
 }
+
+
+# par(mar=c(2,2,10,10))
+# gs_multi_plot(gs, expand=c("Set_V","Set_W","Set_X","Set_Y","Set_Z"))
+
+
 
 
 
@@ -734,12 +779,44 @@ gs_multi_plot <- function(gs, expand, value.cex=0.8, label.cex=0.8) {
 #
 # gs <- gs_import(ls, master_set)
 # gs <- gs_compute_matricies(gs)
-#
-#
-# gs_multi_plot(gs, c("Set_V","Set_W","Set_X","Set_Y","Set_Z"))
 
 
 
+#' Color scale function generator
+#'
+#' @param zlim
+#' @param pal
+#' @param n
+#'
+#' @return get_color function
+#' @export
+#'
+#' @examples
+gs_color_scale <- function(zlim, pal='ArmyRose', pal_trim=0) {
+  n=101
+  trim_n = round(n * pal_trim)
+
+
+  max_z = max(abs(zlim))
+
+  colors <- hcl.colors(n, pal)
+  colors = colors[(1+trim_n) : (n - trim_n)]
+
+  n = length(colors)
+
+  get_color <- function(x=NULL) {
+    if (is.null(x)) {
+      return(colors)
+    }
+
+    out = colors[round((x + max_z) / (max_z * 2) * (n-1)) + 1]
+    out[x < zlim[1]] <- colors[1]
+    out[x > zlim[2]] <- colors[n]
+    return(out)
+  }
+
+  return(get_color)
+}
 
 #' palette function
 #'

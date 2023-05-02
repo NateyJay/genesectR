@@ -9,9 +9,6 @@ gs_make_plot.df(gs, breaks, plot_type = "pval")
 \arguments{
 \item{plot_type}{}
 }
-\value{
-
-}
 \description{
 Basic plotting structure
 }

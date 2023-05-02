@@ -4,13 +4,18 @@
 \alias{gs_multi_plot}
 \title{Multi-comparison plot}
 \usage{
-gs_multi_plot(gs, expand, value.cex = 0.8, label.cex = 0.8)
+gs_multi_plot(
+  gs,
+  expand,
+  value.cex = 0.8,
+  label.cex = 0.8,
+  zlim = NULL,
+  palette = "Purple-Green",
+  palette_trim = 0.2
+)
 }
 \arguments{
 \item{label.cex}{}
-}
-\value{
-
 }
 \description{
 Multi-comparison plot

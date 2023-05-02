@@ -4,13 +4,18 @@
 \alias{gs_plot_fischer}
 \title{Wrapper to plot the fisher exact test analysis}
 \usage{
-gs_plot_fischer(gs, breaks = c(), gap = 0.2, margin = 5)
+gs_plot_fischer(
+  gs,
+  breaks = c(),
+  gap = 0.2,
+  margin = 5,
+  palette = "Purple-Green",
+  palette_trim = 0.2,
+  zlim = NULL
+)
 }
 \arguments{
 \item{margin}{}
-}
-\value{
-
 }
 \description{
 Wrapper to plot the fisher exact test analysis
