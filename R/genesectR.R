@@ -497,6 +497,20 @@ gs_make_plot.df <- function(gs, breaks, plot_type="pval") {
 #' @export
 #'
 #' @examples
+#'
+#' # master_set <- c(str_glue("Gene_{1:1000}"))
+#'
+#' ls <- list(Set_A= sample(master_set, 300),
+#'            Set_B= sample(master_set, 27),
+#'            Set_C= sample(master_set, 99))
+#'
+#'
+#' gs <- gs_import(ls, master_set)
+#' gs <- gs_compute_matricies(gs, mc=T)
+#' gs_plot_fischer(gs, breaks=3)
+#'
+#'
+#'
 gs_plot_fischer <- function(gs, breaks = c(), gap=0.2,
                             palette='Purple-Green',
                             palette_trim=0.2,
@@ -636,12 +650,16 @@ gs_plot_fischer <- function(gs, breaks = c(), gap=0.2,
 #'
 #' @examples
 #'
-#' master_set <- c(str_glue("Gene_{1:1000}"))
+#' master_set <- str_glue("Gene_{1:1000}")
 #'
 #' ls <- list(Set_A= sample(master_set, 300),
-#'            Set_B= sample(master_set, 27),
-#'            Set_C= sample(master_set, 99))
-#'
+#'            Set_B= sample(master_set[1:100], 27),
+#'            Set_C= sample(master_set, 99),
+#'            Set_V= sample(master_set[1:100], 15),
+#'            Set_W= sample(master_set, 201),
+#'            Set_X= sample(master_set, 500),
+#'            Set_Y= sample(master_set, 44),
+#'            Set_Z= sample(master_set, 766))
 #'
 #' gs <- gs_import(ls, master_set)
 #' gs <- gs_compute_matricies(gs, mc=T)
