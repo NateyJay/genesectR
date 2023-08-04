@@ -26,7 +26,7 @@
 #'
 #' @description Normalizes all input gene names to match the master list and produces a base gs object
 #'
-#' @param set_list List object of vectors containing gene names.
+#' @param set_list List object of vectors containing gene names. List should be named as this is used for plotting later.
 #' @param master_set Vector containing all gene names in the transcriptome.
 #'
 #' @return A list object which contains coded set information.
@@ -38,6 +38,11 @@ gs_import <- function(set_list, master_set) {
 
   message(str_glue("{length(set_list)} sets imported"))
   message(str_glue("{length(master_set)} entries in master set"))
+
+  if (is.null(names(set_list))) {
+    message("Warning: sets are not named in list. Assigning names relative to their set order (Set_*).")
+    names(set_list) <- str_glue("Set_{1:length(set_list)}")
+  }
 
   message("Removing entries from sets not in master")
 
@@ -53,6 +58,11 @@ gs_import <- function(set_list, master_set) {
   }
   return(list(set_list=set_list, master_set=master_set))
 }
+
+
+
+
+
 
 #' fisher test
 #'

@@ -7,7 +7,7 @@
 gs_import(set_list, master_set)
 }
 \arguments{
-\item{set_list}{List object of vectors containing gene names.}
+\item{set_list}{List object of vectors containing gene names. List should be named as this is used for plotting later.}
 
 \item{master_set}{Vector containing all gene names in the transcriptome.}
 }
